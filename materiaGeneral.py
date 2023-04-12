@@ -24,7 +24,7 @@ documents = loader.load()
 
 
 # Divide el texto de entrada en partes significativas para poder procesarlo.
-# Se divide en fragmentos con un tamanio de 1000 y el segundo parametro es paraa que no superpongan los fragmentos
+# Se divide en fragmentos con un tamanio de 1000 y el segundo parametro es para que no superpongan los fragmentos
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 
 # Se corte cada texto de entrada por documento
