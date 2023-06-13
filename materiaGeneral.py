@@ -7,7 +7,7 @@ import magic
 import os
 import nltk
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
 
 # nltk.download('averaged_perceptron_tagger')
 

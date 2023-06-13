@@ -16,7 +16,7 @@ documents = SimpleDirectoryReader(ruta).load_data()
 # print(documents)
 
 # Clave de openAI
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 
 # Vamos a customizar para nuestro caso
 # define LLM, en este caso vamos a utilizar "gpt-3.5-turbo"
@@ -25,12 +25,12 @@ llm_predictor = LLMPredictor(llm=chat)
 
 # Definimos el prompt
 # Esta es la máxima cantidad que permite de ingreso de un texto
-max_input_size =2049  #4096
+max_input_size =4096  #4096
 # Esta es la máxima cantidad de tokens que va a tener la respuesta
 # En este caso va a ser de 256 porque es preferible que la respuesta sea concisa y que la pregunta tenga la mayor
 # cantidad posible de contexto. Como en este caso es solo clasificación esta lógica va a servir, con los sumarios
 # se tiene que aplicar otra estrategia.
-num_output = 400
+num_output = 1600
 # un poco overlap es bueno porque de esta forma se logra que no queden desacopladas las partes y se puedan relacionar
 max_chunk_overlap = 20
 # crea una instancia de PromptHelper con las caracteristicas anteriores, esto se envia al llm
@@ -46,7 +46,8 @@ index = GPTSimpleVectorIndex.from_documents(
 )
 
 # La pregunta que va a buscar la IA en los textos.
-query = "Da las clasificaciones de derecho a las que pertenece el texto: penal, penal economico, privado, procesal, procesal penal, publico o laboral? Dime el porque. Responde en Español!!"
+query = "Primero identificar cuantos sumarios tiene el texto: Se debe hacer un sumario por cada resuelve importante del juez. Segundo redactar cada sumario explicando las cuestiones legales en disputa, el analisis legal del juez o jueces  y la pena para el acusado"
+# query = "Realizar un sumario juridico por cada hecho relevante del fallo. Se debe esplicar como un informe tecnico legal los antecedentes del caso, las cuestiones legales en disputa, el análisis legal, y principalmente la decisión del juez o jueces y la pena para el acusado. "
 
 # Realiza la búsqueda de similitud y obtiene los documentos más relevantes
 respuesta_final = index.query(query) # Busca la pregunta a partir de los indices
