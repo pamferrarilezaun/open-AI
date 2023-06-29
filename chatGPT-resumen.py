@@ -29,7 +29,7 @@ documents = SimpleDirectoryReader(ruta).load_data()
 # print(documents)
 
 # Clave de openAI
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 
 # Vamos a customizar para nuestro caso
 # define LLM, en este caso vamos a utilizar "gpt-3.5-turbo"
@@ -79,11 +79,11 @@ CHAT_REFINE_PROMPT_TMPL_MSGS = [
         "------------\n"
         "Dado el nuevo contexto y usando lo mejor de tu conocimiento, mejora la respuesta anterior.\n"
         "Recuerda, si respondes en inglés será un error grave.\n"
-        "Si no conoces la respuesta escribe lo que sepas del fallo."
-        "Si no tiene información suficiente para responder no lo escribas en la respuesta."
+        "Si no conoces la respuesta escribe lo que sepas.\n"
+        "Si no tiene información suficiente para responder no lo escribas en la respuesta.\n"
         "Recuerda que debes responder como un abogado experto en fallos judiciales\n"
-        "Es grave que la salida no contenga como minimo 120 palabras.\n"
-        "Si no es necesario hacer cambios, ignora estas instrucciones y repite la respuesta anterior."
+        "La salida debe contener como minimo 200 palabras.\n"
+        "Si no es necesario hacer cambios, ignora estas instrucciones y repite la respuesta anterior.\n"
     ),
 ]
 

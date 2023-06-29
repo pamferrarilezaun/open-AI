@@ -22,7 +22,7 @@ from llama_index.prompts.prompts import QuestionAnswerPrompt, RefinePrompt
 from llama_index import GPTSimpleVectorIndex, SimpleDirectoryReader
 
 # Busca los txt de la carpeta a la que corresponde
-ruta = 'data'
+ruta = 'salidas'
 
 # Esto usa LlamaIndex
 documents = SimpleDirectoryReader(ruta).load_data()
@@ -30,7 +30,7 @@ documents = SimpleDirectoryReader(ruta).load_data()
 
 # Clave de openAI
 # OPENAI_API_KEY = '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'
-OPENAI_API_KEY = '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'
+OPENAI_API_KEY = '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'
 
 # Vamos a customizar para nuestro caso
 # define LLM, en este caso vamos a utilizar "gpt-3.5-turbo"
@@ -43,7 +43,6 @@ CHAT_PROMPT_TEMPLATE_MESSAGES = [
     SystemMessage(content="Por favor, responde en español."),
     SystemMessage(content="Si respondes en inglés, serás penalizado."),
     SystemMessage(content="Eres un experto en el campo legal y jurídico, especialmente en Argentina."),
-    SystemMessage(content="Estás aquí para realizar resumenes técnicos juridicos."),
     
     HumanMessagePromptTemplate.from_template(
         "Información sobre el contexto a continuación:\n"
@@ -51,15 +50,15 @@ CHAT_PROMPT_TEMPLATE_MESSAGES = [
         "{context_str}\n"
         "---------------------\n"
 
-        "El juez o tribunal a partir de los hechos explicados en el fallo toma decisiones sobre la aplicación de normas o leyes relativas a esos hechos."
-        "En base a esos hechos, las normas o leyes fueron aplicadas y la interpretación de esas normas el juez o tribunal dicta sentencia."
+        "Un abogado experto en temas judiciales en Argentina puede leer un fallo y clasificar el mismo en ramas del derecho"
+        "Un abogado experto en temas juridiciales sabe como detecta los principales temas dentro de un fallo judicial y asi poder generar las palabras claves."
         
         "{query_str}\n"
 
     ),
     HumanMessage(content=
                  "El formato de tu respuesta debe ser siempre, obligatoriamente, de esta forma: \n\n"
-                 "Interpretación del texto: <Interpretación del texto> \n"
+                 "Keywords: <Keywords> \n"
                  #"Materias del derecho: <Materias>\n"
                 )
 ]
@@ -79,12 +78,11 @@ CHAT_REFINE_PROMPT_TMPL_MSGS = [
         "{context_msg}\n"
         "------------\n"
         "Dado el nuevo contexto y usando lo mejor de tu conocimiento, mejora la respuesta anterior.\n"
+        "La respuesta debe estar en forma de lista.\n"
+        "Recuerda que cada item debe tener como maximo 5 palabras.\n"
+        # "La lista de keywords debe tener como maximo 7 palabras. Escoge las palabras mas relevantes."
         "Recuerda, si respondes en inglés será un error grave.\n"
-        "Es obligatorio que la salida contenga como minimo 250 palabras.\n"
-        "Si no tienes información suficiente para responder no lo escribas en la respuesta.\n"
-        "Si no conoces la respuesta escribe lo que sepas.\n"
-        "No hagas referencia a la respuesta anterior ni tampoco al contexto anterior\n"
-        "Si no es necesario hacer cambios, ignora estas instrucciones y repite la respuesta anterior.\n"
+        "Si no podes mejorar la respuesta anterior solo repítela. Si no cumples con esto serás castigado.\n"
     ),
 ]
 
@@ -113,20 +111,8 @@ index = GPTSimpleVectorIndex.from_documents(
     documents, service_context=service_context, 
 )
 
-#La pregunta que va a buscar la IA en los textos.
-query ="Explica las sentencias laborales dictadas por el juez o tribunal para cada acusado. Estan al final del fallo. Si existen sobreseimientos también escríbelos." 
-respuesta1 = index.query(query, text_qa_template = CHAT_PROMPT, refine_template = CHAT_REFINE_PROMPT ) # Busca la pregunta a partir de los indices.
-print("\n",respuesta1)
-
-query = "Explica detalladamente qué hizo cada acusado. Si no tienes información habla de los hechos jurídicos generales del fallo"
-respuesta2 = index.query(query, text_qa_template = CHAT_PROMPT, refine_template = CHAT_REFINE_PROMPT ) # Busca la pregunta a partir de los indices.
-print("\n",respuesta2)
-
-query = "Nombra cuáles son las normas o leyes aplicadas o citadas en el fallo. Explica porque se mencionan esas normas o leyes."
-respuesta3 = index.query(query, text_qa_template = CHAT_PROMPT, refine_template = CHAT_REFINE_PROMPT ) # Busca la pregunta a partir de los indices.
-print("\n",respuesta3)
-
-
-
-
-
+# query = "Hace una lista de palabras que describa cuál es el hecho ilegal del fallo."
+query = "Debes realizar una lista de keywords que describan el delito y la sentencia. No se deben mencionar nornmas o leyes. Solo nombra palabras jurídicas."
+# query = "Siendo un abogado experto en fallos judiciales y sabiendo las principales ramas del derecho. Debes realizar una lista de keywords que describan el delito y la sentencia. No se deben mencionar nornmas o leyes."
+respuesta = index.query(query, text_qa_template = CHAT_PROMPT, refine_template = CHAT_REFINE_PROMPT ) # Busca la pregunta a partir de los indices.
+print("\n",respuesta)

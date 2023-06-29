@@ -114,7 +114,7 @@ index = GPTSimpleVectorIndex.from_documents(
 )
 
 #La pregunta que va a buscar la IA en los textos.
-query ="Explica las sentencias laborales dictadas por el juez o tribunal para cada acusado. Estan al final del fallo. Si existen sobreseimientos también escríbelos." 
+query ="Explica las sentencias economicas dictadas por el juez o tribunal para cada acusado. Estan al final del fallo. Si existen sobreseimientos también escríbelos." 
 respuesta1 = index.query(query, text_qa_template = CHAT_PROMPT, refine_template = CHAT_REFINE_PROMPT ) # Busca la pregunta a partir de los indices.
 print("\n",respuesta1)
 
